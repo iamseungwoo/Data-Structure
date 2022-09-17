@@ -60,7 +60,6 @@ int binsearch(int list[], int searchnum, int left, int right) {
             left = mid + 1;
         }
         if (list[mid] == searchnum) {
-            printf("list[mid]: %d\n", list[mid]);
             return counter;
         }
     }
@@ -86,7 +85,7 @@ int main() {
     printf("1.2. 배열의 크기를 100부터 1,000,000까지 바꾸면서 sort 함수의 실행 시간 측정\n");
     printf("       n        시간   정렬상태");
     int updateSize = 100;
-    for(int i = 100; i < 1000000; i+=updateSize) {
+    for(int i = 100; i <= 1000000; i+=updateSize) {
         if (i == 1000)  updateSize = 1000;
         if (i == 10000) updateSize = 10000;
         if (i == 100000)    updateSize = 100000;
