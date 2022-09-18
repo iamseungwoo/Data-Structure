@@ -69,26 +69,26 @@ int binsearch(int list[], int searchnum, int left, int right) {
 int main() {
     int A[100000];
     for (int i = 0; i < 100000; i++) {
-        A[i] = rand() % 100001;
+        A[i] = (rand() % 100000) + 1;
     }
     printf("1.1. 무작위 100,000개 정수 생성 및 정렬, 정렬 검사 수행\n");
     printf("1.1.1. 배열 A에 100,000개의 정수를 무작위로 생성하여 저장\n");
-    draw(A, 100000);
+    draw(A, 100000);    // 배열 A 출력
 
     printf("1.1.2. 배열 A에 무작위로 저장된 정수를 정렬\n");
-    sort(A, 100000);
-    draw(A, 100000);
+    sort(A, 100000);    // 배열 A 정렬
+    draw(A, 100000);    // 배열 A 출력
 
     printf("1.1.3. 배열 A에 정렬된 정수의 정렬 상태 확인\n");
-    (is_sorted(A, 100000)) ? printf("정렬 완료!\n") : printf("Not sorted\n");
+    (is_sorted(A, 100000)) ? printf("정렬 완료!\n") : printf("Not sorted\n");   // 배열 A가 정렬되면 정렬완료 출력
 
     printf("1.2. 배열의 크기를 100부터 1,000,000까지 바꾸면서 sort 함수의 실행 시간 측정\n");
     printf("       n        시간   정렬상태");
-    int updateSize = 100;
+    int updateSize = 100;   // 배열크기 증가율
     for(int i = 100; i <= 1000000; i+=updateSize) {
-        if (i == 1000)  updateSize = 1000;
-        if (i == 10000) updateSize = 10000;
-        if (i == 100000)    updateSize = 100000;
+        if (i == 1000)  updateSize = 1000;  // i가 1,000이 되면 1,000씩 증가하게 한다.
+        if (i == 10000) updateSize = 10000; // i가 10,000이 되면 10,000씩 증가
+        if (i == 100000)    updateSize = 100000;    // i가 100,000이 되면 100,000씩 증가
         initArray(i);   // 배열 초기화
         clock_t start, stop;    // 시간 측정 변수 선언
         start = clock();    // 시간 측정 시작
@@ -100,7 +100,7 @@ int main() {
     printf("1.3. 100,000개의 정수를 무작위로 생성하여 정렬 후 이진검색 수행\n");
     printf("1.3.1. 배열에 100,000개의 정수를 무작위로 생성하여 저장\n");
     for (int i = 0; i < 100000; i++) {
-        A[i] = rand() % 100001;
+        A[i] = (rand() % 100000) + 1;   // 1 ~ 100000 까지 난수 생성
     }
     printf("완료.\n");
     printf("1.3.2. 배열에 무작위로 저장된 정수 정렬\n");
@@ -130,17 +130,39 @@ int main() {
     printf("1.4.2. 배열에 저장된 50000개의 정수 정렬\n");
     sort(A3, 50000);
     printf("1.4.3. 배열에 정렬된 정수의 정렬 상태 확인");
-    (is_sorted(A, 50000)) ? printf("정렬 완료!\n") : printf("Not sorted\n");
+    (is_sorted(A3, 50000)) ? printf("정렬 완료!\n") : printf("Not sorted\n");
 
     input = 0;
     while (input != -1) {
         printf("검색 데이터( 1 ~ 50000 ) : ");
         scanf("%d", &input);
-        if (input < 1 || input > 50000) {
+        if (input < 1 || input > 50000) {   // 범위 벗어나면 break
             printf("검색 종료.\n");
             break;
         }
         printf("검색 데이터 : %9d\tCounter %d: \n", input, binsearch(A3, input, 0, 49999));
+    }
+
+    printf("1.4.4. 배열에 50000개의 정수를 역순으로 생성하여 저장\n");
+    int A4[100000];
+    // A4 역순 정렬 생성
+    for (int i = 0; i < 50000; i++) {
+        A4[i] = 100000 - i;
+    }
+    printf("1.4.5. 배열에 저장된 50000개의 정수 정렬\n");
+    sort(A4, 100000);   // A4 정렬
+    printf("1.4.6. 배열에 정렬된 정수의 정렬 상태 확인");
+    (is_sorted(A4, 100000)) ? printf("정렬 완료!\n") : printf("Not sorted\n");
+
+    input = 0;
+    while (input != -1) {
+        printf("검색 데이터( 1 ~ 100000 ) : ");
+        scanf("%d", &input);
+        if (input < 1 || input > 100000) {  // 범위 벗어나면 break;
+            printf("검색 종료.\n");
+            break;
+        }
+        printf("검색 데이터 : %9d\tCounter %d: \n", input, binsearch(A4, input, 0, 99999));
     }
     return 0;
 }
