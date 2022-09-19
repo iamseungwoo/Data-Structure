@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <time.h>
 
+#define _CRT_SECURE_NO_WARNINGS
+
 /** 1.2 에서 쓰이는 정렬 array. main 함수에서 1000000크기 쓰면 stack이 터지기 때문에 전역에서 설정 해주어야함.*/
 int A2[1000000];
 
