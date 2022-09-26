@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
+#include <ctime>
 
 
 void swap(char *a, char *b) {
@@ -92,13 +92,13 @@ int main(void) {
         start = clock();
         perm(arr, 0, i);
         end = clock();
-        time[i] = (double)(end-start) / CLOCKS_PER_SEC;
+        time[i] = ((double)(end-start) / CLOCKS_PER_SEC);
         printf("\n");
         free(arr);
     }
     printf("  원소갯수    실행시간\n");
-    for (int i = 0; i < 10; i++) {
-        printf("%6d %14.3lf\n", i+1, time[i]);
+    for (int i = 1; i <= 10; i++) {
+        printf("%6d %14.3lf\n", i, time[i]);
     }
 
     return 0;
