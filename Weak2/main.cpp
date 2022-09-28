@@ -10,7 +10,7 @@ void swap(char *a, char *b) {
     *a = *b;
     *b = temp;
 }
-
+int cnt;
 void perm(char *list, int i, int n) {
     if (i == n) {
         printf("%s ", list);
@@ -41,6 +41,7 @@ void swap(int *a, int *b) {
 void perm(int *list, int i, int n) {
     if (i == n) {
         draw(list, n);
+        cnt++;
     } else {
         for (int j = i; j < n; j++) {
             swap(list + i, list + j);
@@ -80,24 +81,27 @@ int main(void) {
         printf("\n");
         free(arr);
     }
-
+    int a[11];
     printf("2.3. 순열 원소 개수를 변화시키면서 실행 시간 관찰\n");
-    double time[10];
-    for (int i = 1; i <= 10; i++) {
+    double time[11];
+    for (int i = 1; i < 11; i++) {
         int *arr = (int *)malloc(sizeof(int) * i);
         for (int j = 0; j < i; j++) {
             arr[j] = j+1;
         }
         clock_t start, end;
         start = clock();
+        cnt = 0;
         perm(arr, 0, i);
         end = clock();
         time[i] = ((double)(end-start) / CLOCKS_PER_SEC);
         printf("\n");
         free(arr);
+        a[i] = cnt;
     }
     printf("  원소갯수    실행시간\n");
     for (int i = 1; i <= 10; i++) {
+
         printf("%6d %14.3lf\n", i, time[i]);
     }
 
