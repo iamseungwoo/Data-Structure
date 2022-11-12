@@ -1,6 +1,6 @@
-#include <stdio.h>
-#include <cstdlib>
 #include "Polynomial.h"
+#include <cstdlib>
+#include <stdio.h>
 
 polyPointer avail;
 
@@ -27,13 +27,9 @@ polyPointer create_polynomial() {
 
 // add func
 polyPointer cpadd(polyPointer a, polyPointer b) {
-    // a, b head node
-    polyPointer startA, startB;
     // c head node, rear nnode
     polyPointer front, rear;
 
-    startA = a;
-    startB = b;
     // 실제 값이 있는 노드로 옮김 expon이 -1 에서 -1이 아닌 것으로
     a = a->link;
     b = b->link;
@@ -42,7 +38,7 @@ polyPointer cpadd(polyPointer a, polyPointer b) {
     front = create_polynomial();
     rear = front;
 
-    int sum, doneA = 0, doneB = 0;
+    int sum;
     do {
         switch (compare(a->expon, b->expon)) {
             case -1:
@@ -50,17 +46,11 @@ polyPointer cpadd(polyPointer a, polyPointer b) {
                 b = b->link;
                 break;
             case 0:
-                // (a,b) 둘중 하나끝나거나, (a,b) 둘다 끝났을 때 걸린다. a, b 둘다 head 노드로 돌아오기 때문에 a = b 일 때만 조건문 해도됨
-                if (startA == a) {
-                    doneA = 1;
-                }
-                if (startB == b) {
-                    doneB = 1;
-                }
-
-                sum = (int) (a->coef + b->coef);
+                // (a,b) 둘중 하나끝나거나, (a,b) 둘다 끝났을 때 걸린다. a, b 둘다 head 노드로 돌아오기 때문에 a = b 일 때만
+                // 조건문 해도됨
+                sum = (int)(a->coef + b->coef);
                 if (sum) {
-                    attach((float) sum, a->expon, &rear);
+                    attach((float)sum, a->expon, &rear);
                 }
                 a = a->link;
                 b = b->link;
@@ -69,27 +59,19 @@ polyPointer cpadd(polyPointer a, polyPointer b) {
                 attach(a->coef, a->expon, &rear);
                 a = a->link;
         }
-    } while (!doneA && !doneB);
+    } while (a->expon != -1 && b->expon != -1);
+    // a나 b둘중 하나 expon 이 -1이면 escape, expon이 -1이면 head노드 이기 때문
 
-    // a는 안끝나고 b는 끝났을 때
-    if (doneB && !doneA) {
-        for (; !doneA; a = a->link) {
-            if (a == startA) {
-                doneA = 1;
-            }
-            attach(a->coef, a->expon, &rear);
-        }
+    // a남은거 다 attach
+    for (; a->expon != -1; a = a->link) {
+        attach(a->coef, a->expon, &rear);
     }
 
-    // b는 안끝나고 a는 끝났을 때
-    if (doneA && !doneB) {
-        for (; !doneB; b = b->link) {
-            if (b == startB) {
-                doneB = 1;
-            }
-            attach(b->coef, b->expon, &rear);
-        }
+    // 아니면 b 남은거 다 attach
+    for (; b->expon != -1; b = b->link) {
+        attach(b->coef, b->expon, &rear);
     }
+
     // attach에서 rear->link 는 front 되게 설정됨
     return front;
 }
@@ -121,6 +103,7 @@ void cerase(polyPointer *ptr) {
         *ptr = NULL;
     }
 }
+
 // 가용 리스트 있으면 반환 하고 아니면 새로 동적할당 해준다.
 polyPointer getNode(void) {
     polyPointer node;
@@ -128,7 +111,7 @@ polyPointer getNode(void) {
         node = avail;
         avail = avail->link;
     } else {
-        node = (polyPointer) malloc(sizeof(polyNode));
+        node = (polyPointer)malloc(sizeof(polyNode));
         if (node == NULL) {
             fprintf(stderr, "memory full\n");
             exit(1);
@@ -136,6 +119,7 @@ polyPointer getNode(void) {
     }
     return node;
 }
+
 // 해당 노드를 avail 앞에다가 붙여줌, avail에 하나 추가하는 느낌
 void retNode(polyPointer ptr) {
     ptr->link = avail;
@@ -182,7 +166,7 @@ polyPointer cpmul(polyPointer A, polyPointer B) {
         // 처음 곱셈하면 D에 그대로 Ci 복사해줌
         if (!dFlag) {
             D = Ci;
-        } else{
+        } else {
             // 두번째 곱셈 부터 D 와 Ci 더해준다.
             D = cpadd(D, Ci);
         }
@@ -219,7 +203,8 @@ int main() {
     while (1) {
         printf("다항식의 항을 입력하세요. (coef expon) : ");
         scanf("%f %d", &coef, &expon);
-        if (expon == -1) break;
+        if (expon == -1)
+            break;
         attach(coef, expon, &A);
     }
     // A가 head노드를 가리키게 하기 위해서
@@ -229,14 +214,14 @@ int main() {
     // A 리스트 출력
     print_polynomial(A);
 
-
     // A 리스트와 내용 같음.
     printf("다항식 B(x)\n");
     polyPointer B = create_polynomial();
     while (1) {
         printf("다항식의 항을 입력하세요. (coef expon) : ");
         scanf("%f %d", &coef, &expon);
-        if (expon == -1) break;
+        if (expon == -1)
+            break;
         attach(coef, expon, &B);
     }
     B = B->link;
@@ -249,7 +234,6 @@ int main() {
     print_polynomial(C);
     // C 안쓰니깐 가용 리스트로 넘김
     cerase(&C);
-
 
     printf("7.3 다항식 곱셈\n");
     polyPointer D = cpmul(A, B);
