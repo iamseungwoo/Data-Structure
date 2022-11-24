@@ -244,6 +244,7 @@ int main() {
             break;
         }
         remove_node(&A, delete_key);
+        inorder_traversal(A);
     }
 
     cout << "9.2. 생성된 이진 검색 트리에서 key값을 활용한 검색\n";
