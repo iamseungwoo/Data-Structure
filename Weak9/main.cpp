@@ -156,10 +156,14 @@ node *make_bst(int n) {
     return root;
 }
 
-node *remove_node(node **tree, int key) {
+void remove_node(node **tree, int key) {
+    // 부모 노드
     node *parent_node;
+    // 현재 노드
     node *current_node = *tree;
+    // 삭제 될 노드
     node *delete_node;
+    // 현재 노드가 key를 만나거나 null이 될때 까지 이동 parent 포인터 계속 업데이트
     while (current_node != nullptr && current_node->key != key) {
         parent_node = current_node;
         if (current_node->key < key) {
@@ -168,14 +172,16 @@ node *remove_node(node **tree, int key) {
             current_node = current_node->lchild;
         }
     }
+
     delete_node = current_node;
 
     if (current_node == nullptr) {
         cout << "해당 노드를 찾을 수 없습니다.";
-        return nullptr;
+        return;
     }
 
     if (delete_node->lchild == nullptr && delete_node->rchild == nullptr) { // 단말 노드 일 때
+        // 삭제될 노드가 부모노드의 lchild인지 rchild인지 찾는 것
         if (parent_node->key > delete_node->key) {
             parent_node->lchild = nullptr;
         } else {
@@ -194,11 +200,15 @@ node *remove_node(node **tree, int key) {
             parent_node->rchild = delete_node->lchild;
         }
     } else {
+        // 삭제될 노드의 오른쪽 노드에서 제일 왼쪽 노드 찾아서
         node *delete_left_sub = delete_node->rchild;
         while (delete_left_sub->lchild != nullptr) {
             delete_left_sub = delete_left_sub->lchild;
         }
+
+        // 삭제될 노드의 왼쪽 노드를 넣어줌.
         delete_left_sub->lchild = delete_node->lchild;
+
 
         if (parent_node->key > delete_node->key) {
             parent_node->lchild = delete_node->rchild;
@@ -206,8 +216,9 @@ node *remove_node(node **tree, int key) {
             parent_node->rchild = delete_node->rchild;
         }
     }
-    free(delete_node);
 
+    cout << "key: " << delete_node->key << ", value: " << delete_node->value << "가 삭제 되었습니다.\n";
+    free(delete_node);
 }
 
 int key_set[12] = {10, 6, 15, 8, 18, 12, 3, 14, 9, 20, 5, 2};
@@ -221,10 +232,19 @@ int main() {
         insert_node(&A, key_set[i]);
     }
     inorder_traversal(A);
-    cout << endl;
-    remove_node(&A, 15);
-    inorder_traversal(A);
     cout << "생성 완료\n";
+
+    // binary search tree delete implement
+    cout << "추가 기능 이진 검색 트리 삭제 기능\n";
+    int delete_key;
+    while(true) {
+        cout << "삭제하고 싶은 key를 입력하세요. -1 입력시 종료";
+        cin >> delete_key;
+        if (delete_key == -1) {
+            break;
+        }
+        remove_node(&A, delete_key);
+    }
 
     cout << "9.2. 생성된 이진 검색 트리에서 key값을 활용한 검색\n";
     int k;
