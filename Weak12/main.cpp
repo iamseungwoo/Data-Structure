@@ -1,3 +1,4 @@
+#pragma comment(linker, "/STACK: 2000000000")
 #define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <stdlib.h>
